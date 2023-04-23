@@ -10,7 +10,7 @@ BEGIN
 				EST.nrodocumento,
 				EST.fechanacimiento,
 				ESC.escuela,
-git remote remove origin				CAR.carrera,
+ 				CAR.carrera,
 				SED.sede,
 				EST.fotografia
 		FROM estudiantes EST
@@ -51,6 +51,26 @@ CALL spu_estudiantes_registrar('Munayco', 'José', 'D', '77779999', '1999-09-20'
 CALL spu_estudiantes_registrar('Prada', 'Teresa', 'C', '01234567', '2002-09-25', 3, 2, '');
 SELECT * FROM estudiantes;
 */
+
+-- Proceso Eliminar 
+DELIMITER $$
+CREATE PROCEDURE spu_estudiantes_eliminar(IN idestudiante_ INT)
+BEGIN
+	DELETE FROM estudiantes
+	WHERE idestudiante = idestudiante_;
+END $$
+
+CALL spu_estudiantes_eliminar(4)
+
+DELIMITER$$
+CREATE PROCEDURE spu_fotografia_eliminar(IN idestudiante_ INT)
+BEGIN
+	SELECT fotografia FROM estudiantes WHERE idestudiante = idestudiante_;
+END$$
+
+CALL spu_fotografia_eliminar(5)
+CALL spu_estudiantes_listar
+	
 
 DELIMITER $$
 CREATE PROCEDURE spu_cargos_listar()
@@ -129,4 +149,23 @@ END $$
 
 CALL spu_colaboradores_registrar('Munayco', 'José',1 ,1 ,'977779999' , 'C', "", "Calle Lima");
 SELECT * FROM colaboradores;
+
+
+DELIMITER $$
+CREATE PROCEDURE spu_colaboradores_eliminar(IN idcolaborador_ INT)
+BEGIN
+	DELETE FROM colaboradores
+	WHERE idcolaborador = idcolaborador_;
+END $$
+
+CALL spu_colaboradores_eliminar(4)
+
+DELIMITER$$
+CREATE PROCEDURE spu_cv_eliminar(IN idcolaborador_ INT)
+BEGIN
+	SELECT cv FROM colaboradores WHERE idcolaborador = idcolaborador_;
+END$$
+
+CALL spu_cv_eliminar(7)
+CALL spu_colaboradores_listar
 

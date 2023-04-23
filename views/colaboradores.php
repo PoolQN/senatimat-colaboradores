@@ -66,7 +66,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header bg-secondary text-light">
-          <h5 class="modal-title" id="modalTitleId">Registro de Cursos</h5>
+          <h5 class="modal-title" id="modalTitleId">Registro de Colaboradores</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -219,9 +219,9 @@
       function preguntarRegistro(){
         Swal.fire({
           icon: 'question',
-          title: 'Matrículas',
-          text: '¿Está seguro de registrar al estudiante?',
-          footer: 'Desarrollado con PHP',
+          title: 'COLABORADORES',
+          text: '¿Está seguro de registrar al Colaborador?',
+          footer: 'Ingresando Colaborador',
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#3498DB',
           showCancelButton: true,
@@ -246,10 +246,63 @@
       });
 
 
+      $("#tabla-colaboradores tbody").on("click", ".eliminar", function(){
+        const cvEliminar = $(this).data("idcolaborador");
+          $.ajax({
+            url: '../controllers/colaboradores.controller.php',
+            type: 'POST',
+            data: {
+              operacion : 'eliminarcv',
+              idcolaborador   : cvEliminar
+            },
+            success: function(result){
+              if (result == ""){
+                ListarColaboradores();
+              }
+            }
+          });
+      });
+
+      $("#tabla-colaboradores tbody").on("click", ".eliminar", function(){
+        const idcolaboradorEliminar = $(this).data("idcolaborador");
+        Swal.fire({
+          title: "¿Está seguro?",
+          text: "Esto eliminará el registro del Estudiante",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Eliminar"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: '../controllers/colaboradores.controller.php',
+              type: 'POST',
+              data: {
+                operacion : 'eliminar',
+                idcolaborador   : idcolaboradorEliminar
+              },
+              success: function(result){
+                if (result == ""){
+                  ListarColaboradores();
+                }
+              }
+            });
+          };
+        }); 
+      });
+
 
       //Funciones de carga automática
       mostrarColaboradores();
-    })
+
+      
+    });
+
+    
+    
+    
+      
 
     
   </script>

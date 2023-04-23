@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-  <title>Title</title>
+  <title>Estudiantes</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,24 +11,24 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
-  <!-- Iconos de Bootstrap 5 -->
+  <!-- Iconos de Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
-
-  <!-- Lightbox CSS -->
+  
+  <!-- LightBox CSS -->
   <link rel="stylesheet" href="../dist/lightbox2/src/css/lightbox.css">
 
 </head>
 
 <body>
   
-  <!-- Modal trigger button -->
-  <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modal-estudiante">
-    Launch
-  </button>
-
+  
   <div class="container">
+    <!-- Modal trigger button -->
+    <button type="button" class="btn btn-primary btn-lg m-1" data-bs-toggle="modal" data-bs-target="#modal-estudiante">
+      Registrar Estudiante
+    </button>
     <table id="tabla-estudiantes" class="table table-striped table-sm">
-      <thead>
+      <thead class="bg-primary text-light">
         <tr>
           <th>#</th>
           <th>Apellidos</th>
@@ -45,6 +45,7 @@
       </tbody>
     </table>
   </div>
+
   
   <!-- Modal Body -->
   <div class="modal fade" id="modal-estudiante" tabindex="-1" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
@@ -73,7 +74,7 @@
                 <select name="tipodocumento" id="tipodocumento" class="form-select form-select-sm">
                   <option value="">Seleccione</option>
                   <option value="D">DNI</option>
-                  <option value="C">Carnet de Extranjería</option>
+                  <option value="C">Carnet de Extranjeria</option>
                 </select>
               </div>
               <div class="mb-3 col-md-6">
@@ -122,6 +123,8 @@
       </div>
     </div>
   </div>
+
+
   
   <!-- Bootstrap JavaScript Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
@@ -138,7 +141,7 @@
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-  <!-- Lightbox JS -->
+  <!-- LightBox JS -->
   <script src="../dist/lightbox2/src/js/lightbox.js"></script>
 
   <script>
@@ -169,18 +172,19 @@
       }
 
       function registrarEstudiante(){
-        //Enviaremos los datos dentro de un OBJETO
+
+        // Enviaremos los datos dentro de un OBJETO
         var formData = new FormData();
 
-        formData.append("operacion", "registrar");
-        formData.append("apellidos", $("#apellidos").val());
-        formData.append("nombres", $("#nombres").val());
-        formData.append("tipodocumento", $("#tipodocumento").val());
-        formData.append("nrodocumento", $("#nrodocumento").val());
-        formData.append("fechanacimiento", $("#fechanacimiento").val());
-        formData.append("idcarrera", $("#carrera").val());
-        formData.append("idsede", $("#sede").val());
-        formData.append("fotografia", $("#fotografia")[0].files[0]);
+        formData.append("operacion","registrar");
+        formData.append("apellidos",$("#apellidos").val());
+        formData.append("nombres",$("#nombres").val());
+        formData.append("tipodocumento",$("#tipodocumento").val());
+        formData.append("nrodocumento",$("#nrodocumento").val());
+        formData.append("fechanacimiento",$("#fechanacimiento").val());
+        formData.append("idcarrera",$("#carrera").val());
+        formData.append("idsede",$("#sede").val());
+        formData.append("fotografia",$("#fotografia")[0].files[0]);
 
         $.ajax({
           url: '../controllers/estudiante.controller.php',
@@ -192,7 +196,6 @@
           success: function(){
             $("#formulario-estudiantes")[0].reset();
             $("#modal-estudiante").modal("hide");
-            alert("Guardado correctamente");
           }
         });
       }
@@ -211,11 +214,12 @@
           //Identificando acción del usuario
           if (result.isConfirmed){
             registrarEstudiante();
+            listarEstudiantes();
           }
         });
       }
 
-      function mostrarEstudiantes(){
+      function listarEstudiantes(){
         $.ajax({
           url: '../controllers/estudiante.controller.php',
           type: 'POST',
@@ -226,6 +230,7 @@
           }
         });
       }
+
 
       $("#guardar-estudiante").click(preguntarRegistro);
 
@@ -255,8 +260,54 @@
         obtenerEscuelas();
       });
 
-      //Funciones de carga automática
-      mostrarEstudiantes();
+      $("#tabla-estudiantes tbody").on("click", ".eliminar", function(){
+        const fotoEliminar = $(this).data("idestudiante");
+          $.ajax({
+            url: '../controllers/estudiante.controller.php',
+            type: 'POST',
+            data: {
+              operacion : 'eliminarFotografia',
+              idestudiante   : fotoEliminar
+            },
+            success: function(result){
+              if (result == ""){
+                listarEstudiantes();
+              }
+            }
+          });
+      });
+
+      $("#tabla-estudiantes tbody").on("click", ".eliminar", function(){
+        const idestudianteEliminar = $(this).data("idestudiante");
+        Swal.fire({
+          title: "¿Está seguro?",
+          text: "Esto eliminará el registro del Estudiante",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Eliminar"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $.ajax({
+              url: '../controllers/estudiante.controller.php',
+              type: 'POST',
+              data: {
+                operacion : 'eliminar',
+                idestudiante   : idestudianteEliminar
+              },
+              success: function(result){
+                if (result == ""){
+                  listarEstudiantes();
+                }
+              }
+            });
+          };
+        }); 
+      });
+
+      // Funciones de Carga Automatica
+      listarEstudiantes();
 
     });
   </script>

@@ -4,7 +4,7 @@ require_once '../models/Colaboradores.php';
 
 if (isset($_POST['operacion'])){
 
-  $estudiante = new Colaboradores();
+  $colaboradores = new Colaboradores();
 
   if ($_POST['operacion'] == 'registrar'){
 
@@ -38,20 +38,20 @@ if (isset($_POST['operacion'])){
     }
 
     //PASO 2: Enviar el array al método registrar
-    $estudiante->registrarColaboradores($datosGuardar);
+    $colaboradores->registrarColaboradores($datosGuardar);
 
   }
 
   if ($_POST['operacion'] == 'listar'){
-    $data = $estudiante->ListarColaboradores();
+    $data = $colaboradores->ListarColaboradores();
 
     if ($data){
       $numeroFila = 1;
-      $datosEstudiante = '';
-      $botonNulo = " <a href='#' class='btn btn-sm btn-warning' title='No tiene fotografía'><i class='bi bi-eye-slash-fill'></i></a>";
+      $datosColaborador = '';
+      $botonNulo = " <a href='#' class='btn btn-sm btn-warning' title='No tiene CV'><i class='bi bi-eye-slash-fill'></i></a>";
       
       foreach($data as $registro){
-        $datosEstudiante = $registro['apellidos'] . ' ' . $registro['nombres'];
+        $datosColaborador = $registro['apellidos'] . ' ' . $registro['nombres'];
 
         //La primera parte a RENDERIZAR, es lo standard (siempre se muestra)
         echo "
@@ -65,15 +65,13 @@ if (isset($_POST['operacion'])){
             <td>{$registro['tipocontrato']}</td>
             <td>{$registro['direccion']}</td>
             <td>
-              <a href='#' class='btn btn-sm btn-danger'><i class='bi bi-trash3'></i></a>
-              <a href='#' class='btn btn-sm btn-info'><i class='bi bi-pencil-fill'></i></a>";
-        
+              <a href='#' data-idcolaborador='{$registro['idcolaborador']}' class='btn btn-danger btn-sm eliminar'><i class='bi bi-trash3'></i></a>";        
         //La segunda parte a RENDERIZAR, es el botón VER FOTOGRAFÍA
         if ($registro['cv'] == ''){
           echo $botonNulo;
         }else{
-          echo " <a href='../views/Doc/pdf/{$registro['cv']}' data-lightbox='{$registro['idcolaborador']}' data-title='{$datosEstudiante}' class='btn btn-sm btn-warning'><i class='bi bi-eye-fill'></i></a>";
-        }
+          echo " <a href='../views/Doc/pdf/{$registro['cv']}' target='_blank' class='btn btn-sm btn-warning'><i class='bi bi-eye-fill'></i></a>";
+        } 
 
         //La tercera parte a RENDERIZAR, cierre de la fila
         echo "
@@ -86,5 +84,21 @@ if (isset($_POST['operacion'])){
       }
     }
   } //Fin operacion=listar
+
+  if ($_POST['operacion'] == 'eliminar'){
+    $colaboradores->eliminarColaboradores($_POST['idcolaborador']);
+  }
+
+
+  if ($_POST['operacion'] == 'eliminarcv'){
+    $registro = $colaboradores->eliminarcv($_POST['idcolaborador']);
+      
+    if($registro == null ){
+      echo"No hay Cv a Eliminar";
+    }else{
+      unlink("../views/Doc/pdf/{$registro['cv']}");
+    }
+    
+  }
 
 }
