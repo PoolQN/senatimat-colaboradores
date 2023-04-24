@@ -44,6 +44,6 @@ if (isset($_GET['operacion'])){
   if ($_GET['operacion'] == 'finalizar'){
     session_destroy();
     session_unset();
-    header('location:../views/estudiantes.php');
+    header('location:../index.php');
   }
 }

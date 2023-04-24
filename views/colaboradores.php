@@ -57,6 +57,9 @@
     </div>
   </div>  <!--Fin del container-->
 
+  <button><a href="./estudiantes.php">Ir a la Tabla Estudiante</a></button>
+  <button><a href="../controllers/usuario.controller.php?operacion=finalizar">Finalizar Sesión</a></button>
+
   <!--Zona Modales-->
   <!-- Modal trigger button -->
   
