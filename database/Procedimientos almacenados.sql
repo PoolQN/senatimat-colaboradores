@@ -169,3 +169,59 @@ END$$
 CALL spu_cv_eliminar(7)
 CALL spu_colaboradores_listar
 
+
+
+-- LOGIN --
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_login(IN _nombreusuario VARCHAR(30))
+BEGIN	
+	SELECT idusuario, nombreusuario, claveacceso,
+						apellidos, nombres, nivelacceso
+	FROM usuarios
+	WHERE nombreusuario = _nombreusuario AND estado = '1';
+END $$
+	
+CALL spu_usuarios_login('POOL');
+
+-- Registrar usuario
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_registrar
+(
+	IN _nombreusuario		VARCHAR(30),
+	IN _claveacceso			VARCHAR(90),
+	IN _apellidos			VARCHAR(30),
+	IN _nombres			VARCHAR(30)
+)
+BEGIN
+	INSERT INTO usuarios (nombreusuario, claveacceso, apellidos, nombres) VALUES
+				(_nombreusuario, _claveacceso, _apellidos, _nombres);
+END $$
+
+CALL spu_usuarios_registrar('PEDRO', '789456', 'Perez Gomez','Raul');
+CALL spu_usuarios_registrar('LUIS', '147852', 'Campos Bautista','Luis');
+
+
+-- Mostrar Usuarios
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_mostrar()
+BEGIN
+	SELECT 	*
+		FROM usuarios
+		WHERE estado = '1'
+		ORDER BY idusuario DESC;
+END $$
+
+CALL spu_usuarios_mostrar()
+
+-- Eliminar Usuarios
+DELIMITER $$
+CREATE PROCEDURE spu_usuarios_eliminar(IN _idusuario INT)
+BEGIN
+	UPDATE usuarios
+		SET estado = '0' 
+		WHERE idusuario = _idusuario;
+END $$
+
+CALL spu_usuarios_eliminar(3);
+SELECT * FROM usuarios;
+
