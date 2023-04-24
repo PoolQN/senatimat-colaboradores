@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once '../models/usuario.php';
+require_once '../models/Usuario.php';
 
 if (isset($_POST['operacion'])){
 
@@ -23,13 +23,13 @@ if (isset($_POST['operacion'])){
       $claveEncriptada = $registro["claveacceso"];
       
       //Validar la contraseña
-      if (password_verify($_POST['claveIngresada'], $claveEncriptada)){
-        $resultado["status"] = true;
-        $resultado["mensaje"] = "Bienvenidos al Sistema";
-        $_SESSION["login"]  =  true;
-      }else{
-        $resultado["mensaje"] = "No encontramos al usuario";
-      }
+        if (password_verify($_POST['claveIngresada'], $claveEncriptada)){
+            $resultado["status"] = true;
+            $resultado["mensaje"] = "Bienvenidos al Sistema";
+            $_SESSION["login"]  =  true;
+        }else{
+            $resultado["mensaje"] = "No encontramos al usuario";
+        }
     }else{
       //El usuario no existe
       $resultado["mensaje"] = "No encontramos al usuario";

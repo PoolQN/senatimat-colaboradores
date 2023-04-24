@@ -68,7 +68,7 @@ if (isset($_SESSION['login']) && $_SESSION['login']){
             url  :     'controllers/usuario.controller.php',
             type :     'POST',
             data :  {
-              operacion   :     'login',
+              operacion       :  'login',
               nombreusuario   :   usuario,
               claveIngresada  :   clave
             },
@@ -76,7 +76,7 @@ if (isset($_SESSION['login']) && $_SESSION['login']){
             success  :  function (result){
               console.log(result);
               if (result["status"]){
-                window.location.href = "views/estudiantes.php";
+                window.location.href = "views/colaboradores.php";
               }else{
                 alert(result["mensaje"]);
               }
@@ -87,7 +87,7 @@ if (isset($_SESSION['login']) && $_SESSION['login']){
 
       $("#iniciar-sesion").click(iniciarSesion);
 
-    });
+    })
   </SCript>
 
 </body>
