@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_SESSION['login']) && $_SESSION['login']){
-  header('location:views/estudiantes.php');
+  header('location:views/colaboradores.php');
 }
 ?>
 

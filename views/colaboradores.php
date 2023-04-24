@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['login']) && $_SESSION['login'] == false){
+  header('location:../index.php');
+}
+?>
+
 <!doctype html>
 <html lang="es">
 
